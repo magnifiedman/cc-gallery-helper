@@ -101,7 +101,23 @@ if($step==2){ $adminHTML = $g->getAdminListing($page); }
 	<script>
 	$(document).ready(function() {
 			$('.fancybox').fancybox();
+			$('#previewpop').fancybox();
 			$("#theForm").validate();
+
+			$("a.preview").click(function(event){
+				var gid = $(this).attr('id');
+				$.ajax({
+					type: "get",
+					url: "lib/ajax.php",
+					data: "id="+gid,
+					dataType: 'json',
+					success: function (data) {
+						$('#preview').html(data['embed']);
+						$('#previewpop').trigger('click'); 
+					}
+				});
+			});
+
 	});
 	</script> -->
 

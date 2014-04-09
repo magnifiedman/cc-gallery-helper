@@ -71,7 +71,23 @@ if($searchHTML===false){ $searchHTML = '<h2>Sorry, there were no results found f
 	<script>
 	$(document).ready(function() {
 			$('.fancybox').fancybox();
+			$('#previewpop').fancybox();
 			$("#theForm").validate();
+
+			$("a.preview").click(function(event){
+				var gid = $(this).attr('id');
+				$.ajax({
+					type: "get",
+					url: "lib/ajax.php",
+					data: "id="+gid,
+					dataType: 'json',
+					success: function (data) {
+						$('#preview').html(data['embed']);
+						$('#previewpop').trigger('click'); 
+					}
+				});
+			});
+
 	});
 	</script> -->
 

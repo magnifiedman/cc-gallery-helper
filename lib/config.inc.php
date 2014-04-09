@@ -4,14 +4,14 @@
  * Wherein we define some constants for the system
  */
 
-	//error_reporting(E_ALL);
-	//ini_set('display_errors', 1);
+	error_reporting(E_ALL);
+	ini_set('display_errors', 1);
 
 	// site paths
-	/*define('BASE_URL','/cc-gallery-helper/');
-	define('ROOT_PATH',$_SERVER['DOCUMENT_ROOT'] . '/cc-gallery-helper/');*/
-	define('BASE_URL','');
-	define('ROOT_PATH','');
+	define('BASE_URL','/cc-gallery/');
+	define('ROOT_PATH',$_SERVER['DOCUMENT_ROOT'] . '/cc-gallery/');
+	//define('BASE_URL','');
+	//define('ROOT_PATH','');
 
 	// database connection - development
 	define('DB_HOST','localhost');
@@ -30,4 +30,4 @@
 	define('ADMIN_USERS_TABLE','cc_galleries_users_admin');
 
 	// data
-	define('RESULTS_PERPAGE','50');
+	define('RESULTS_PERPAGE','25');

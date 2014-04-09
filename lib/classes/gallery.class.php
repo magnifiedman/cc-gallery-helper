@@ -21,12 +21,12 @@ class Gallery {
 			$html .= '<h2>Latest Galleries</h2>';
 			$html .= '<table class="gallery-search" cellspacing="0" cellpadding="0">'."\n";
 			$html .= '<tr>'."\n";
-			$html .= '<th>Date Entered</th><th>Subject</th><th>Description</th><th>Embed Code</th><th>Preview</th>'."\n";
+			$html .= '<th>Entered</th><th>Subject</th><th>Description</th><th>Embed Code</th><th>Preview</th>'."\n";
 			$html .= '</tr>'."\n";
 
 			while ($gallery = mysql_fetch_assoc($r)){
 				$html .= '<tr>'."\n";
-				$html .= '<td>' . date("m-d-Y",strtotime($gallery['date_entered'])) . '</td><td>' . $gallery['subject'] . '</td><td>' . $gallery['description'] . '</td><td><i class="fa fa-align-left"></i> <a class="fancybox" href="#embed' . $gallery['id'] .'">Embed Code</a></td><td><i class="fa fa-picture-o"></i> <a class="fancybox" href="#preview' . $gallery['id'] .'">Preview Gallery</a></td>'."\n";
+				$html .= '<td>' . date("m.d.y",strtotime($gallery['date_entered'])) . '</td><td>' . $gallery['subject'] . '</td><td>' . $gallery['description'] . '</td><td><i class="fa fa-align-left"></i> <a class="fancybox" href="#embed' . $gallery['id'] .'">Embed Code</a></td><td><i class="fa fa-picture-o"></i> <a class="fancybox" href="#preview' . $gallery['id'] .'">Preview Gallery</a></td>'."\n";
 				$html .= '</tr>'."\n";
 				$html .= '<div id="embed' . $gallery['id'] . '" style="width:640px;display: none;"><h2>GALLERY EMBED CODE:</h2><h3>' . $gallery['subject'] . ': ' . $gallery['description'] . '</h3><h3>&nbsp;</h3><h3>Select all and hit Ctrl-C (PC) or Command-C (Mac) to copy</h3><textarea class="codeholder">' . htmlspecialchars($gallery['embed']) . '</textarea></div>'."\n";
 				$html .= '<div id="preview' . $gallery['id'] . '" style="width:640px;display:none;"><h2>GALLERY PREVIEW:</h2><h3>' . $gallery['subject'] . ': ' . $gallery['description'] . '</h3>' . $gallery['embed'] . '</div>'."\n";
@@ -43,12 +43,59 @@ class Gallery {
 		}
 	}
 
+
+	function getPageGalleries($page){
+		$offset = ($page-1)*RESULTS_PERPAGE;
+		$r = mysql_query("
+			SELECT *
+			FROM " . GALLERIES_TABLE . "
+			ORDER BY date_entered desc
+			LIMIT " . $offset . ", " . RESULTS_PERPAGE );
+
+		if(mysql_num_rows($r)>0){
+			$html = '';
+			$html .= '<h2>Latest Galleries</h2>';
+			$html .= '<table class="gallery-search" cellspacing="0" cellpadding="0">'."\n";
+			$html .= '<tr>'."\n";
+			$html .= '<th>Entered</th><th>Subject</th><th>Description</th><th>Embed Code</th><th>Preview</th>'."\n";
+			$html .= '</tr>'."\n";
+
+			while ($gallery = mysql_fetch_assoc($r)){
+				$html .= '<tr>'."\n";
+				$html .= '<td>' . date("m.d.y",strtotime($gallery['date_entered'])) . '</td><td>' . $gallery['subject'] . '</td><td>' . $gallery['description'] . '</td><td><i class="fa fa-align-left"></i> <a class="fancybox" href="#embed' . $gallery['id'] .'">Embed Code</a></td><td><i class="fa fa-picture-o"></i> <a class="fancybox" href="#preview' . $gallery['id'] .'">Preview Gallery</a></td>'."\n";
+				$html .= '</tr>'."\n";
+				$html .= '<div id="embed' . $gallery['id'] . '" style="width:640px;display: none;"><h2>GALLERY EMBED CODE:</h2><h3>' . $gallery['subject'] . ': ' . $gallery['description'] . '</h3><h3>&nbsp;</h3><h3>Select all and hit Ctrl-C (PC) or Command-C (Mac) to copy</h3><textarea class="codeholder">' . htmlspecialchars($gallery['embed']) . '</textarea></div>'."\n";
+				$html .= '<div id="preview' . $gallery['id'] . '" style="width:640px;display:none;"><h2>GALLERY PREVIEW:</h2><h3>' . $gallery['subject'] . ': ' . $gallery['description'] . '</h3>' . $gallery['embed'] . '</div>'."\n";
+			}
+
+			$html .= '</table>'."\n";
+
+			return $html;
+
+		}
+
+		else {
+			return '<h2>No current galleries in the system.</h2>';
+		}
+	}
+
+
+	function getTotalGalleries(){
+
+		$r = mysql_query("
+			SELECT count(id) 
+			FROM " . GALLERIES_TABLE);
+		if(mysql_num_rows($r)>0){ return mysql_result($r,0,'count(id)'); }
+	}
+
 	function getSearchResults($searchStr,$page=''){
-		$s = trim($searchStr);
+		$s = htmlspecialchars($searchStr);
+		$s = trim($s);
 		$s = explode(' ',$s);
 
 		$searchResults1 = array();
 		$searchResults2 = array();
+		$searchResults3 = array();
 		$searchSQL='';
 
 		foreach ($s as $searchTerm){
@@ -71,6 +118,7 @@ class Gallery {
 			}
 		}
 
+
 		// description
 		$r2 = mysql_query("
 			SELECT *
@@ -85,23 +133,43 @@ class Gallery {
 				}
 			}
 		}
-		
 
 		$searchResults = array_merge($searchResults1,$searchResults2);
 
+
+		// keywords
+		$r3 = mysql_query("
+			SELECT *
+			FROM " . GALLERIES_TABLE . "
+			WHERE keywords like '%" . $searchTerm . "%'
+			ORDER BY date_entered DESC
+			");
+		if(mysql_num_rows($r3) > 0){
+			while($galleries3 = mysql_fetch_assoc($r3)){
+				if(!in_array($galleries3,$searchResults)){
+					array_push($searchResults3,$galleries3);
+				}
+			}
+		}
+
+		$searchResultsFinal = array_merge($searchResults,$searchResults3);
+		
+
+		
+
 		//print_r($searchResults);
 
-		if(!empty($searchResults)){
+		if(!empty($searchResultsFinal)){
 			$html = '';
 			$html .= '<h2>Showing results for "' . $_POST['searchStr'] . '"</h2>';
 			$html .= '<table class="gallery-search" cellspacing="0" cellpadding="0">'."\n";
 			$html .= '<tr>'."\n";
-			$html .= '<th>Date Entered</th><th>Subject</th><th>Description</th><th>Embed Code</th><th>Preview</th>'."\n";
+			$html .= '<th>Entered</th><th>Subject</th><th>Description</th><th>Embed Code</th><th>Preview</th>'."\n";
 			$html .= '</tr>'."\n";
 
-			foreach ($searchResults as $gallery){
+			foreach ($searchResultsFinal as $gallery){
 				$html .= '<tr>'."\n";
-				$html .= '<td>' . date("m-d-Y",strtotime($gallery['date_entered'])) . '</td><td>' . $gallery['subject'] . '</td><td>' . $gallery['description'] . '</td><td><i class="fa fa-align-left"></i> <a class="fancybox" href="#embed' . $gallery['id'] .'">Embed Code</a></td><td><i class="fa fa-picture-o"></i> <a class="fancybox" href="#preview' . $gallery['id'] .'">Preview Gallery</a></td>'."\n";
+				$html .= '<td>' . date("m.d.y",strtotime($gallery['date_entered'])) . '</td><td>' . $gallery['subject'] . '</td><td>' . $gallery['description'] . '</td><td><i class="fa fa-align-left"></i> <a class="fancybox" href="#embed' . $gallery['id'] .'">Embed Code</a></td><td><i class="fa fa-picture-o"></i> <a class="fancybox" href="#preview' . $gallery['id'] .'">Preview Gallery</a></td>'."\n";
 				$html .= '</tr>'."\n";
 				$html .= '<div id="embed' . $gallery['id'] . '" style="width:640px;display: none;"><h2>GALLERY EMBED CODE:</h2><h3>' . $gallery['subject'] . ': ' . $gallery['description'] . '</h3><h3>&nbsp;</h3><h3>Select all and hit Ctrl-C (PC) or Command-C (Mac) to copy</h3><textarea class="codeholder">' . htmlspecialchars($gallery['embed']) . '</textarea></div>'."\n";
 				$html .= '<div id="preview' . $gallery['id'] . '" style="width:640px;display:none;"><h2>GALLERY PREVIEW:</h2><h3>' . $gallery['subject'] . ': ' . $gallery['description'] . '</h3>' . $gallery['embed'] . '</div>'."\n";
@@ -152,12 +220,14 @@ class Gallery {
 	}
 
 
-	function getAdminListing($page=''){
+	function getAdminListing($page){
+		$offset = ($page-1)*RESULTS_PERPAGE;
+
 		$r = mysql_query("
 			SELECT *
 			FROM " . GALLERIES_TABLE . "
 			ORDER BY date_entered desc
-			LIMIT " . RESULTS_PERPAGE);
+			LIMIT " . $offset . ", " . RESULTS_PERPAGE);
 
 
 		if(mysql_num_rows($r)>0){
@@ -166,12 +236,12 @@ class Gallery {
 			$html .= '<a class="button" href="add-gallery.php"><i class="fa fa-plus-square m"></i> Add Gallery</a>';
 			$html .= '<table class="gallery-search" cellspacing="0" cellpadding="0">'."\n";
 			$html .= '<tr>'."\n";
-			$html .= '<th>Date Entered</th><th>Subject</th><th>Description</th><th>Preview</th><th>Edit</th><th>Delete</th>'."\n";
+			$html .= '<th>Entered</th><th>Subject</th><th>Description</th><th>Preview</th><th>Edit</th><th>Delete</th>'."\n";
 			$html .= '</tr>'."\n";
 
 			while ($gallery = mysql_fetch_assoc($r)){
 				$html .= '<tr>'."\n";
-				$html .= '<td>' . date("m-d-Y",strtotime($gallery['date_entered'])) . '</td><td>' . $gallery['subject'] . '</td><td>' . $gallery['description'] . '</td><td><i class="fa fa-picture-o"></i> <a class="fancybox" href="#preview' . $gallery['id'] .'">Preview Gallery</a></td><td><i class="fa fa-pencil-square-o"></i> <a href="gallery-details.php?id=' . $gallery['id'] . '"">Edit Details</a></td><td><i class="fa fa-trash-o"></i> <a class="fancybox" href="#delete' . $gallery['id'] . '">Delete Gallery</a></td>'."\n";
+				$html .= '<td>' . date("m.d.y",strtotime($gallery['date_entered'])) . '</td><td>' . $gallery['subject'] . '</td><td>' . $gallery['description'] . '</td><td><i class="fa fa-picture-o"></i> <a class="fancybox" href="#preview' . $gallery['id'] .'">Preview Gallery</a></td><td><i class="fa fa-pencil-square-o"></i> <a href="gallery-details.php?id=' . $gallery['id'] . '"">Edit Details</a></td><td><i class="fa fa-trash-o"></i> <a class="fancybox" href="#delete' . $gallery['id'] . '">Delete Gallery</a></td>'."\n";
 				$html .= '</tr>'."\n"; 
 				$html .= '<div id="embed' . $gallery['id'] . '" style="width:640px;display: none;"><h2>GALLERY EMBED CODE:</h2><h3>' . $gallery['subject'] . ': ' . $gallery['description'] . '</h3><h3>&nbsp;</h3><h3>Select all and hit Ctrl-C (PC) or Command-C (Mac) to copy</h3><textarea class="codeholder">' . htmlspecialchars($gallery['embed']) . '</textarea></div>'."\n";
 				$html .= '<div id="preview' . $gallery['id'] . '" style="width:640px;display:none;"><h2>GALLERY PREVIEW:</h2><h3>' . $gallery['subject'] . ': ' . $gallery['description'] . '</h3>' . $gallery['embed'] . '</div>'."\n";
@@ -212,9 +282,9 @@ class Gallery {
 	function addGallery($vars){
 		$r = mysql_query("
 			INSERT into " . GALLERIES_TABLE . "
-			(id, date_entered, subject, description, embed)
+			(id, date_entered, subject, description, keywords, embed)
 			VALUES
-			('',NOW(),'" . $vars['subject'] . "', '" . $vars['description'] . "', '" . $vars['embed'] . "')
+			('',NOW(),'" . trim($vars['subject']) . "', '" . trim($vars['description']) . "', '" . trim($vars['keywords']) . "', '" . trim($vars['embed']) . "')
 			");
 		return true;
 	}
@@ -222,9 +292,10 @@ class Gallery {
 	function updateGallery($vars){
 		$r = mysql_query("
 			UPDATE " . GALLERIES_TABLE . "
-			SET subject = '" . $vars['subject'] . "',
-			description = '" . $vars['description'] . "',
-			embed = '" . $vars['embed'] . "'
+			SET subject = '" . trim($vars['subject']) . "',
+			description = '" . trim($vars['description']) . "',
+			keywords = '" . trim($vars['keywords']) . "',
+			embed = '" . trim($vars['embed']) . "'
 			WHERE id='" . $vars['id'] ."'
 			");
 		return true;

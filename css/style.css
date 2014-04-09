@@ -1,5 +1,5 @@
 /* main stylesheet */
-html, body { text-align:center; padding:0; margin:0; }
+html, body { text-align:center; padding:20px 0 0 0; margin:0; }
 
 .pageContainer { 
 	width:990px!important;
@@ -95,6 +95,35 @@ img.header {
 		background-color:#e6e6e6!important;
 		border-radius:0 0 8px 8px!important;
 		height:auto!important;
+	}
+
+
+	/* pagination */
+	div.pagination {
+		margin:30px auto;
+	}
+
+	div.pagination a {
+		border:1px solid #a6a6a6;
+		background-color:#f6f6f6;
+		font-size:18px!important;
+		padding:6px 10px;
+		margin:4px;
+	}
+
+	div.pagination a:hover {
+		background-color:#d6d6d6;
+		font-size:18px!important;
+		text-decoration:none!important;
+	}
+
+	div.pagination span {
+		border:1px solid #a6a6a6;
+		background-color:#222;
+		font-size:18px!important;
+		color:#f6f6f6;
+		padding:6px 10px;
+		margin:4px;
 	}
 
 	/* form */

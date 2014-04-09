@@ -49,8 +49,9 @@ $galleryHTML = $g->getGalleryDetails($_GET['id']);
 			<form action="" method="post" id="theForm">
 				<input type="hidden" name="editForm" value="y" />
 				<input type="hidden" name="id" value="<?php echo $_GET['id']; ?>" />
-				<p><label>Gallery Subject / Artist:</label><input type="text" name="subject" class="required w-640" value="<?php echo $galleryHTML['subject']; ?>" /></p>
-				<p><label>Description:</label><input type="text" name="description" class="required w-640" value="<?php echo $galleryHTML['description']; ?>" /></p>
+				<p><label>Gallery Subject / Artist:</label><input type="text" name="subject" class="required w-640" value="<?php echo htmlspecialchars($galleryHTML['subject']); ?>" /></p>
+				<p><label>Description:</label><input type="text" name="description" class="required w-640" value="<?php echo htmlspecialchars($galleryHTML['description']); ?>" /></p>
+				<p><label>Keywords (Separate by comma):</label><input type="text" name="keywords" class="required w-640" value="<?php echo htmlspecialchars($galleryHTML['keywords']); ?>" /></p>
 				<p><label>Embed Code:</label><textarea name="embed" class="codeholder w-640 required"><?php echo htmlspecialchars($galleryHTML['embed']); ?></textarea></p>
 				<p><input type="submit" value="Update Details" name="submit" /></p>
 			</form>
@@ -58,7 +59,7 @@ $galleryHTML = $g->getGalleryDetails($_GET['id']);
 	</div>
 
 <!-- local footer -->
-	<?php include(ROOT_PATH . 'inc/footer-cc.inc.php'); ?>
+	<?php include(ROOT_PATH . 'inc/footer-local.inc.php'); ?>
 
 <!-- cc footer -->
 	<!-- <script src="<?php echo BASE_URL; ?>js/jquery-1.10.1.min.js"></script>

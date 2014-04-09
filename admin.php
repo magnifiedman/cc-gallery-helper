@@ -9,6 +9,14 @@ $g = new Gallery();
 $step=1;
 $deleteMessage='';
 
+// determine page number
+if(isset($_GET['page'])){ $page = intval($_GET['page']); }
+else { $page = 1; }
+
+$searchHTML = $g->getPageGalleries($page);
+$totalGalleries = $g->getTotalGalleries();
+$totalPages = ceil( $totalGalleries / RESULTS_PERPAGE ); 
+
 if(isset($_POST['loginForm'])){
 	if($g->doLogin($_POST)){
 		$step=2;
@@ -27,7 +35,7 @@ if(isset($_POST['deleteForm'])){
 
 if(isset($_COOKIE['photoLogged']) && $_COOKIE['photoLogged']=='y'){ $step=2; }
 
-if($step==2){ $adminHTML = $g->getAdminListing(); }
+if($step==2){ $adminHTML = $g->getAdminListing($page); }
 
 // local header
 	include(ROOT_PATH . 'inc/header-local.inc.php');
@@ -73,15 +81,17 @@ if($step==2){ $adminHTML = $g->getAdminListing(); }
 			<div class="clearfix">&nbsp;</div>
 
 			<?php
-			echo $deleteMessage;
-			echo $adminHTML; ?>
+			echo $deleteMessage; ?>
+			<?php include(ROOT_PATH . 'inc/pagination.html.php'); ?>
+			<?php echo $adminHTML; ?>
+			<?php include(ROOT_PATH . 'inc/pagination.html.php'); ?>
 
 		<?php } ?>
 
 	</div>
 
 <!-- local footer -->
-	<?php include(ROOT_PATH . 'inc/footer-cc.inc.php'); ?>
+	<?php include(ROOT_PATH . 'inc/footer-local.inc.php'); ?>
 
 <!-- cc footer -->
 	<!-- <script src="<?php echo BASE_URL; ?>js/jquery-1.10.1.min.js"></script>

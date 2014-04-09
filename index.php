@@ -6,7 +6,15 @@ require_once(ROOT_PATH . 'lib/classes/gallery.class.php');
 $x=rand(1,9999);
 $g = new Gallery();
 
-$searchHTML = $g->getAllGalleries();
+
+// determine page number
+if(isset($_GET['page'])){ $page = intval($_GET['page']); }
+else { $page = 1; }
+
+$searchHTML = $g->getPageGalleries($page);
+$totalGalleries = $g->getTotalGalleries();
+$totalPages = ceil( $totalGalleries / RESULTS_PERPAGE ); 
+
 
 if(isset($_POST['searchForm'])){
 	$searchHTML = $g->getSearchResults($_POST['searchStr']);
@@ -46,12 +54,14 @@ if($searchHTML===false){ $searchHTML = '<h2>Sorry, there were no results found f
 				<br /><input type="submit" name="submit" value="Find Galleries" /></p>
 		</form>
 
+		<?php if(!isset($_POST['searchStr'])){ include(ROOT_PATH . 'inc/pagination.html.php'); } ?>
 		<?php echo $searchHTML; ?>
+		<?php if(!isset($_POST['searchStr'])){ include(ROOT_PATH . 'inc/pagination.html.php'); } ?>
 
 	</div>
 
 <!-- local footer -->
-	<?php include(ROOT_PATH . 'inc/footer-cc.inc.php'); ?>
+	<?php include(ROOT_PATH . 'inc/footer-local.inc.php'); ?>
 
 <!-- cc footer -->
 	<!-- <script src="<?php echo BASE_URL; ?>js/jquery-1.10.1.min.js"></script>

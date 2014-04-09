@@ -63,6 +63,6 @@ if($searchHTML===false){ $searchHTML = '<h2>Sorry, there were no results found f
 			$('.fancybox').fancybox();
 			$("#theForm").validate();
 	});
-	</script>-->
+	</script> -->
 
 	<?php //include('CCOMRfooter.template'); ?>

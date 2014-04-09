@@ -3,7 +3,7 @@ require_once('lib/config.inc.php');
 require_once(ROOT_PATH . 'lib/db.inc.php'); 
 require_once(ROOT_PATH . 'lib/classes/gallery.class.php'); 
 
-if(!isset($_COOKIE['photoLogged'])){ header("Location: admin.php"); exit; }
+if(!isset($_COOKIE['photoLogged'])){ header("Location: admin.php?".rand(1,9999)); exit; }
 
 $x=rand(1,9999);
 $g = new Gallery();
@@ -16,7 +16,7 @@ if(isset($_POST['addForm'])){
 }
 
 // local header
-	include(ROOT_PATH . 'inc/header-local.inc.php');
+	include(ROOT_PATH . 'inc/header-local.inc.php');*/
 
 // cc header
 	//include_once('/export/home/common/template/T25globalincludes'); // do not modify this line
@@ -53,7 +53,7 @@ if(isset($_POST['addForm'])){
 			<?php } ?>
 
 			<?php if ($step==2){
-				echo '<p class="success">Gallery has been added. <a href="admin.php">&laquo; back to overview page</a></p>'; 
+				echo '<p class="success">Gallery has been added. <a href="admin.php?'.rand(1,9999).'">&laquo; back to overview page</a></p>'; 
 				echo '<h2>' . $_POST['subject'] . ': '. $_POST['description'] . '</h2>';
 				echo stripslashes($_POST['embed']);
 			} ?>

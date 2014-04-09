@@ -8,16 +8,16 @@
 	//ini_set('display_errors', 1);
 
 	// site paths
-	define('BASE_URL','/cc-gallery-helper/');
+	/*define('BASE_URL','/cc-gallery-helper/');
 	define('ROOT_PATH',$_SERVER['DOCUMENT_ROOT'] . '/cc-gallery-helper/');*/
-	/*define('BASE_URL','');
-	define('ROOT_PATH','');*/
+	define('BASE_URL','');
+	define('ROOT_PATH','');
 
 	// database connection - development
 	define('DB_HOST','localhost');
 	define('DB_USER','root');
 	define('DB_PASS','root');
-	define('DB_NAME','devdb');*/
+	define('DB_NAME','devdb');
 
 	// database connection - production
 	/*define('DB_HOST','');

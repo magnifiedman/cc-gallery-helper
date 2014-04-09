@@ -110,10 +110,11 @@ img.header {
 		padding:10px;
 		margin:0 auto;
 		border-radius:0 0 8px 8px;
+		text-align:center;
 	}
 
 	#theForm input[type='text'], #theForm input[type='email'], #theForm input[type='password']{
-		width:300;
+		width:300px;
 		padding:10px;
 		font-size:18px;
 		border-radius:8px 8px 0 0;

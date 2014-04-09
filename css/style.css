@@ -57,6 +57,11 @@ img.header {
 	table.gallery-search td {
 		padding:8px 6px;
 		margin:0;
+		text-align:left;
+	}
+
+	table.gallery-search th {
+		text-align:left;
 	}
 
 	table.gallery-search tr {

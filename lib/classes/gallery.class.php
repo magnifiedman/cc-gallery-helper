@@ -9,7 +9,7 @@ class Gallery {
 	
 	### FRONTEND FUNCTIONS ##########
 
-	function getAllGalleries($page=''){
+	/*function getAllGalleries($page=''){
 		$r = mysql_query("
 			SELECT *
 			FROM " . GALLERIES_TABLE . "
@@ -26,13 +26,14 @@ class Gallery {
 
 			while ($gallery = mysql_fetch_assoc($r)){
 				$html .= '<tr>'."\n";
-				$html .= '<td>' . date("m.d.y",strtotime($gallery['date_entered'])) . '</td><td>' . $gallery['subject'] . '</td><td>' . $gallery['description'] . '</td><td><i class="fa fa-align-left"></i> <a class="fancybox" href="#embed' . $gallery['id'] .'">Embed Code</a></td><td><i class="fa fa-picture-o"></i> <a class="fancybox" href="#preview' . $gallery['id'] .'">Preview Gallery</a></td>'."\n";
+				$html .= '<td>' . date("m.d.y",strtotime($gallery['date_entered'])) . '</td><td>' . $gallery['subject'] . '</td><td>' . $gallery['description'] . '</td><td><i class="fa fa-align-left"></i> <a class="fancybox" href="#embed' . $gallery['id'] .'">Embed Code</a></td><td><i class="fa fa-picture-o"></i> <a class="preview" href="#" id="' . $gallery['id'] .'">Preview Gallery</a></td>'."\n";
 				$html .= '</tr>'."\n";
 				$html .= '<div id="embed' . $gallery['id'] . '" style="width:640px;display: none;"><h2>GALLERY EMBED CODE:</h2><h3>' . $gallery['subject'] . ': ' . $gallery['description'] . '</h3><h3>&nbsp;</h3><h3>Select all and hit Ctrl-C (PC) or Command-C (Mac) to copy</h3><textarea class="codeholder">' . htmlspecialchars($gallery['embed']) . '</textarea></div>'."\n";
 				$html .= '<div id="preview' . $gallery['id'] . '" style="width:640px;display:none;"><h2>GALLERY PREVIEW:</h2><h3>' . $gallery['subject'] . ': ' . $gallery['description'] . '</h3>' . $gallery['embed'] . '</div>'."\n";
 			}
 
 			$html .= '</table>'."\n";
+			$html .= '<div id="previewpop" style="width:640px;display:none;"><h2>GALLERY PREVIEW:</h2><div id="preview"></div></div>'."\n";
 
 			return $html;
 
@@ -41,7 +42,7 @@ class Gallery {
 		else {
 			return '<h2>No current galleries in the system.</h2>';
 		}
-	}
+	}*/
 
 
 	function getPageGalleries($page){
@@ -62,7 +63,7 @@ class Gallery {
 
 			while ($gallery = mysql_fetch_assoc($r)){
 				$html .= '<tr>'."\n";
-				$html .= '<td>' . date("m.d.y",strtotime($gallery['date_entered'])) . '</td><td>' . $gallery['subject'] . '</td><td>' . $gallery['description'] . '</td><td><i class="fa fa-align-left"></i> <a class="fancybox" href="#embed' . $gallery['id'] .'">Embed Code</a></td><td><i class="fa fa-picture-o"></i> <a class="preview" id="' . $gallery['id'] .'" href="#">Preview Gallery</a></td>'."\n";
+				$html .= '<td>' . date("m.d.y",strtotime($gallery['date_entered'])) . '</td><td>' . $gallery['subject'] . '</td><td>' . $gallery['description'] . '</td><td><i class="fa fa-align-left"></i> <a class="fancybox" href="#embed' . $gallery['id'] .'">Embed Code</a></td><td><i class="fa fa-picture-o"></i> <a class="preview" href="#" id="' . $gallery['id'] .'">Preview Gallery</a></td>'."\n";
 				$html .= '</tr>'."\n";
 				$html .= '<div id="embed' . $gallery['id'] . '" style="width:640px;display: none;"><h2>GALLERY EMBED CODE:</h2><h3>' . $gallery['subject'] . ': ' . $gallery['description'] . '</h3><h3>&nbsp;</h3><h3>Select all and hit Ctrl-C (PC) or Command-C (Mac) to copy</h3><textarea class="codeholder">' . htmlspecialchars($gallery['embed']) . '</textarea></div>'."\n";
 				}
@@ -170,7 +171,7 @@ class Gallery {
 
 			foreach ($searchResultsFinal as $gallery){
 				$html .= '<tr>'."\n";
-				$html .= '<td>' . date("m.d.y",strtotime($gallery['date_entered'])) . '</td><td>' . $gallery['subject'] . '</td><td>' . $gallery['description'] . '</td><td><i class="fa fa-align-left"></i> <a class="fancybox" href="#embed' . $gallery['id'] .'">Embed Code</a></td><td><i class="fa fa-picture-o"></i> <a class="preview" id="' . $gallery['id'] .'">Preview Gallery</a></td>'."\n";
+				$html .= '<td>' . date("m.d.y",strtotime($gallery['date_entered'])) . '</td><td>' . $gallery['subject'] . '</td><td>' . $gallery['description'] . '</td><td><i class="fa fa-align-left"></i> <a class="fancybox" href="#embed' . $gallery['id'] .'">Embed Code</a></td><td><i class="fa fa-picture-o"></i> <a class="preview" href="#" id="' . $gallery['id'] .'">Preview Gallery</a></td>'."\n";
 				$html .= '</tr>'."\n";
 				$html .= '<div id="embed' . $gallery['id'] . '" style="width:640px;display: none;"><h2>GALLERY EMBED CODE:</h2><h3>' . $gallery['subject'] . ': ' . $gallery['description'] . '</h3><h3>&nbsp;</h3><h3>Select all and hit Ctrl-C (PC) or Command-C (Mac) to copy</h3><textarea class="codeholder">' . htmlspecialchars($gallery['embed']) . '</textarea></div>'."\n";
 			}
@@ -242,7 +243,7 @@ class Gallery {
 
 			while ($gallery = mysql_fetch_assoc($r)){
 				$html .= '<tr>'."\n";
-				$html .= '<td>' . date("m.d.y",strtotime($gallery['date_entered'])) . '</td><td>' . $gallery['subject'] . '</td><td>' . $gallery['description'] . '</td><td><i class="fa fa-picture-o"></i> <a class="preview" id="' . $gallery['id'] .'">Preview Gallery</a></td><td><i class="fa fa-pencil-square-o"></i> <a href="gallery-details.php?id=' . $gallery['id'] . '"">Edit Details</a></td><td><i class="fa fa-trash-o"></i> <a class="fancybox" href="#delete' . $gallery['id'] . '">Delete Gallery</a></td>'."\n";
+				$html .= '<td>' . date("m.d.y",strtotime($gallery['date_entered'])) . '</td><td>' . $gallery['subject'] . '</td><td>' . $gallery['description'] . '</td><td><i class="fa fa-picture-o"></i> <a class="preview" href="#" id="' . $gallery['id'] .'">Preview Gallery</a></td><td><i class="fa fa-pencil-square-o"></i> <a href="gallery-details.php?id=' . $gallery['id'] . '"">Edit Details</a></td><td><i class="fa fa-trash-o"></i> <a class="fancybox" href="#delete' . $gallery['id'] . '">Delete Gallery</a></td>'."\n";
 				$html .= '</tr>'."\n"; 
 				$html .= '<div id="embed' . $gallery['id'] . '" style="width:640px;display: none;"><h2>GALLERY EMBED CODE:</h2><h3>' . $gallery['subject'] . ': ' . $gallery['description'] . '</h3><h3>&nbsp;</h3><h3>Select all and hit Ctrl-C (PC) or Command-C (Mac) to copy</h3><textarea class="codeholder">' . htmlspecialchars($gallery['embed']) . '</textarea></div>'."\n";
 				$html .= '<div id="delete' . $gallery['id'] . '" style="width:640px;display:none;"><h2>Are you sure you want to delete:</h2><h3>' . $gallery['subject'] . ': ' . $gallery['description'] . '?</h3><form action="" method="post"><input type="hidden" name="deleteForm" value="y" /><input type="hidden" name="id" value="' . $gallery['id'] . '" /><br /><input type="submit" class="button" name="submit" value="Yes, Delete It!" /></form></div>'."\n";

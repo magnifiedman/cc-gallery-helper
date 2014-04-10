@@ -3,7 +3,10 @@ require_once('lib/config.inc.php');
 require_once(ROOT_PATH . 'lib/db.inc.php'); 
 require_once(ROOT_PATH . 'lib/classes/gallery.class.php'); 
 
+
+// redirect - not logged in
 if(!isset($_COOKIE['photoLogged'])){ header("Location: admin.php?".rand(1,9999)); exit; }
+
 
 $x=rand(1,9999);
 $g = new Gallery();
@@ -17,12 +20,13 @@ if(isset($_POST['editForm'])){
 
 $galleryHTML = $g->getGalleryDetails($_GET['id']);
 
-// local header
+
+// local header - comment out to go live on cc server
+
 	include(ROOT_PATH . 'inc/header-local.inc.php');
 
-// cc header
-	//include_once('/export/home/common/template/T25globalincludes'); // do not modify this line
-	//include_once (CDB_REFACTOR_ROOT."feed2.tool"); // do not modify this line
+
+// cc header - remove comment tags to go live on cc servers
 
 	//set variables for og tags and other meta data
 	/*$page_title = "Photo Gallery Helper";
@@ -58,19 +62,23 @@ $galleryHTML = $g->getGalleryDetails($_GET['id']);
 			<?php echo $galleryHTML['embed']; ?>
 	</div>
 
-<!-- local footer -->
+
+<!-- local footer - comment out to go live on cc servers -->
+
 	<?php include(ROOT_PATH . 'inc/footer-local.inc.php'); ?>
 
-<!-- cc footer -->
+
+<!-- cc footer - remove comment tags to go live on cc servers -->
+
 	<!-- <script src="<?php echo BASE_URL; ?>js/jquery-1.10.1.min.js"></script>
 	<script src="<?php echo BASE_URL; ?>js/jquery.validate.min.js"></script>
 	<script src="<?php echo BASE_URL; ?>js/jquery.fancybox.pack.js"></script>
 	<script src="<?php echo BASE_URL; ?>js/jquery.mousewheel-3.0.6.pack.js"></script>
 	<script>
-	$(document).ready(function() {
+		$(document).ready(function() {
 			$('.fancybox').fancybox();
 			$("#theForm").validate();
-	});
+		});
 	</script> -->
 
 	<?php //include('CCOMRfooter.template'); ?>

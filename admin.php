@@ -9,14 +9,14 @@ $g = new Gallery();
 $step=1;
 $deleteMessage='';
 
-// determine page number
+// determine page number and totals for pagination
 if(isset($_GET['page'])){ $page = intval($_GET['page']); }
 else { $page = 1; }
-
-$searchHTML = $g->getPageGalleries($page);
 $totalGalleries = $g->getTotalGalleries();
 $totalPages = ceil( $totalGalleries / RESULTS_PERPAGE ); 
 
+
+// logging in
 if(isset($_POST['loginForm'])){
 	if($g->doLogin($_POST)){
 		$step=2;
@@ -27,23 +27,28 @@ if(isset($_POST['loginForm'])){
 	}
 }
 
+
+// deleting gallery
 if(isset($_POST['deleteForm'])){
 	if($g->deleteGallery($_POST['id'])){
 		$deleteMessage = '<p class="success">Gallery successfully deleted.</p>'; 
 	}
 }
 
+
+// bypass login form if cookie set
 if(isset($_COOKIE['photoLogged']) && $_COOKIE['photoLogged']=='y'){ $step=2; }
 
+
+// get galleries
 if($step==2){ $adminHTML = $g->getAdminListing($page); }
 
-// local header
+
+// local header - comment out to go live on cc server
 	include(ROOT_PATH . 'inc/header-local.inc.php');
 
-// cc header
-	//include_once('/export/home/common/template/T25globalincludes'); // do not modify this line
-	//include_once (CDB_REFACTOR_ROOT."feed2.tool"); // do not modify this line
 
+// cc header - remove comment tags to go live on cc servers
 	//set variables for og tags and other meta data
 	/*$page_title = "Photo Gallery Helper";
 	$page_description = "";
@@ -90,16 +95,19 @@ if($step==2){ $adminHTML = $g->getAdminListing($page); }
 
 	</div>
 
-<!-- local footer -->
+<!-- local footer - comment out to go live on cc servers -->
+
 	<?php include(ROOT_PATH . 'inc/footer-local.inc.php'); ?>
 
-<!-- cc footer -->
+
+<!-- cc footer - remove comment tags to go live on cc servers -->
+
 	<!-- <script src="<?php echo BASE_URL; ?>js/jquery-1.10.1.min.js"></script>
 	<script src="<?php echo BASE_URL; ?>js/jquery.validate.min.js"></script>
 	<script src="<?php echo BASE_URL; ?>js/jquery.fancybox.pack.js"></script>
 	<script src="<?php echo BASE_URL; ?>js/jquery.mousewheel-3.0.6.pack.js"></script>
 	<script>
-	$(document).ready(function() {
+		$(document).ready(function() {
 			$('.fancybox').fancybox();
 			$('#previewpop').fancybox();
 			$("#theForm").validate();
@@ -117,8 +125,7 @@ if($step==2){ $adminHTML = $g->getAdminListing($page); }
 					}
 				});
 			});
-
-	});
+		});
 	</script> -->
 
 	<?php //include('CCOMRfooter.template'); ?>

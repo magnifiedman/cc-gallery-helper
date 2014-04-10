@@ -4,22 +4,22 @@
  * Wherein we define some constants for the system
  */
 
-	error_reporting(E_ALL);
-	ini_set('display_errors', 1);
+	//error_reporting(E_ALL);
+	//ini_set('display_errors', 1);
 
 	// site paths
-	define('BASE_URL','/cc-gallery/');
-	define('ROOT_PATH',$_SERVER['DOCUMENT_ROOT'] . '/cc-gallery/');
-	//define('BASE_URL','');
-	//define('ROOT_PATH','');
+	define('BASE_URL','/cc-gallery/'); // local
+	define('ROOT_PATH',$_SERVER['DOCUMENT_ROOT'] . '/cc-gallery/'); // local
+	//define('BASE_URL',''); // use for cc
+	//define('ROOT_PATH',''); // use for cc
 
-	// database connection - development
+	// database connection - local development
 	define('DB_HOST','localhost');
 	define('DB_USER','root');
 	define('DB_PASS','root');
 	define('DB_NAME','devdb');
 
-	// database connection - production
+	// database connection - cc
 	/*define('DB_HOST','');
 	define('DB_USER','');
 	define('DB_PASS','');
